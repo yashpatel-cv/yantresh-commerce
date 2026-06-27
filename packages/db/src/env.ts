@@ -13,9 +13,17 @@ function getRequiredEnv(name: string): string {
   return value;
 }
 
+export function readDatabaseUrl(): string {
+  return getRequiredEnv("DATABASE_URL");
+}
+
+export function readSecretMasterKey(): string {
+  return getRequiredEnv("SECRET_MASTER_KEY");
+}
+
 export function readDbEnv(): DbEnv {
   return {
-    databaseUrl: getRequiredEnv("DATABASE_URL"),
-    secretMasterKey: getRequiredEnv("SECRET_MASTER_KEY")
+    databaseUrl: readDatabaseUrl(),
+    secretMasterKey: readSecretMasterKey()
   };
 }

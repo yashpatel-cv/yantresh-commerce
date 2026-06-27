@@ -1,3 +1,3 @@
 export { createDb, createSqlClient } from "./client.js";
-export { readDbEnv } from "./env.js";
-export { canonicalControlPlaneSqlPath } from "./sql.js";
+export { readDatabaseUrl, readDbEnv, readSecretMasterKey } from "./env.js";
+export { canonicalControlPlaneSqlPath, packagedControlPlaneSqlPath } from "./sql.js";

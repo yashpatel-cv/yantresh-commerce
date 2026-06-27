@@ -18,7 +18,7 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
-  apps/storefront:
+  apps/admin:
     dependencies:
       next:
         specifier: ^16.2.9
@@ -37,6 +37,56 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
 
+  apps/storefront:
+    dependencies:
+      '@yantresh/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@yantresh/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      next:
+        specifier: ^16.2.9
+        version: 16.2.9(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react:
+        specifier: ^19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+
+  apps/worker:
+    dependencies:
+      '@yantresh/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+
+  packages/config-schema:
+    dependencies:
+      react:
+        specifier: ^19.2.7
+        version: 19.2.7
+      zod:
+        specifier: ^4.1.5
+        version: 4.4.3
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+
+  packages/core:
+    dependencies:
+      '@yantresh/config-schema':
+        specifier: workspace:*
+        version: link:../config-schema
+
   packages/db:
     dependencies:
       drizzle-orm:
@@ -45,6 +95,12 @@ importers:
       postgres:
         specifier: ^3.4.9
         version: 3.4.9
+
+  packages/plugin-sdk:
+    dependencies:
+      '@yantresh/config-schema':
+        specifier: workspace:*
+        version: link:../config-schema
 
 packages:
 
@@ -503,6 +559,9 @@ packages:
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
 snapshots:
 
   '@emnapi/runtime@1.11.1':
@@ -783,3 +842,5 @@ snapshots:
   typescript@6.0.3: {}
 
   undici-types@7.18.2: {}
+
+  zod@4.4.3: {}
