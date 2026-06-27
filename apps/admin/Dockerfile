@@ -8,7 +8,7 @@ RUN corepack enable
 
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @yantresh/admin build
+RUN pnpm exec turbo run build --filter=...@yantresh/admin
 
 FROM node:24-alpine AS runner
 

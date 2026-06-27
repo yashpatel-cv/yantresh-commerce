@@ -8,7 +8,7 @@ RUN corepack enable
 
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @yantresh/storefront build
+RUN pnpm exec turbo run build --filter=...@yantresh/storefront
 
 FROM node:24-alpine AS runner
 
