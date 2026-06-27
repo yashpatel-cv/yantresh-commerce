@@ -9,6 +9,7 @@
   "scripts": {
     "build": "turbo run build",
     "check": "turbo run typecheck",
+    "seed:demo": "pnpm --filter @yantresh/db seed:demo",
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
