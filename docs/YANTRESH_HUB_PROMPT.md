@@ -161,18 +161,25 @@ Requirements:
 
 ## 3. Update the hub Caddy config
 
-Add these exact host blocks:
+Keep the Caddyfile env-driven. Do not hardcode the hostnames directly into the
+site blocks if the hub already uses env placeholders. The correct implementation
+path is:
+
+- fixed production values live in `.env.example` and production `.env`
+- the Caddyfile uses `{$...}` placeholders
+
+Add or preserve these env-backed host blocks:
 
 ```caddyfile
-shop-api.yantresh.com {
+{$SHOP_API_ADDRESS} {
   reverse_proxy yantresh-commerce-medusa:9000
 }
 
-shop-admin.yantresh.com {
+{$SHOP_ADMIN_ADDRESS} {
   reverse_proxy yantresh-commerce-admin:3000
 }
 
-commerce.yantresh.com, demo-store.yantresh.com {
+{$COMMERCE_STOREFRONT_ADDRESS}, {$DEMO_STORE_ADDRESS} {
   reverse_proxy yantresh-commerce-storefront:3000
 }
 ```
@@ -192,6 +199,7 @@ Requirements:
 - do not remove or weaken existing explicit host blocks
 - preserve the current portfolio and `yantresh-os` routes
 - keep Yantresh Commerce blocks grouped together
+- keep the hostnames source-of-truth in env, not duplicated across Caddy blocks
 
 ## 4. Update hub docs
 
