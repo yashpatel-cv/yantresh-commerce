@@ -1,0 +1,65 @@
+services:
+  yantresh-commerce-postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-yantresh_control}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - yantresh-commerce-postgres:/var/lib/postgresql/data
+
+  yantresh-commerce-redis:
+    image: redis:7
+    restart: unless-stopped
+    volumes:
+      - yantresh-commerce-redis:/data
+
+  yantresh-commerce-storefront:
+    image: ${STOREFRONT_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      - yantresh-commerce-postgres
+      - yantresh-commerce-redis
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      MEDUSA_DATABASE_URL: ${MEDUSA_DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      SECRET_MASTER_KEY: ${SECRET_MASTER_KEY}
+
+  yantresh-commerce-admin:
+    image: ${ADMIN_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      - yantresh-commerce-postgres
+      - yantresh-commerce-redis
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      SECRET_MASTER_KEY: ${SECRET_MASTER_KEY}
+
+  yantresh-commerce-medusa:
+    image: ${MEDUSA_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      - yantresh-commerce-postgres
+      - yantresh-commerce-redis
+    environment:
+      DATABASE_URL: ${MEDUSA_DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+
+  yantresh-commerce-worker:
+    image: ${WORKER_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      - yantresh-commerce-postgres
+      - yantresh-commerce-redis
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      MEDUSA_DATABASE_URL: ${MEDUSA_DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      SECRET_MASTER_KEY: ${SECRET_MASTER_KEY}
+
+volumes:
+  yantresh-commerce-postgres:
+  yantresh-commerce-redis:
