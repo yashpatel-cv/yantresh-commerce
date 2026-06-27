@@ -2,7 +2,6 @@ export { applySchema } from "./apply-schema.js";
 export { createDb, createSqlClient } from "./client.js";
 export {
   findActiveDomainByHostname,
-  loadTenantConfigByHostname,
   loadTenantConfigForRequest,
   withTenantRequestContext,
   type TenantConfigRequest,

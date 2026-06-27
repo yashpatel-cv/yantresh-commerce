@@ -1,6 +1,7 @@
 import { isPlatformHostname, parseTenantConfig, resolveRequestedHostname } from "@yantresh/core";
 import { loadTenantConfigForRequest } from "@yantresh/db";
 import { headers } from "next/headers";
+import type { CSSProperties } from "react";
 
 const checkpoints = [
   "Root workspace, db bootstrap, and hub fragments are in place.",
@@ -10,6 +11,18 @@ const checkpoints = [
 
 function readEnv(name: string): string {
   return process.env[name] ?? "unset";
+}
+
+function buildTenantStyle(tenant: ReturnType<typeof parseTenantConfig>): CSSProperties {
+  const colors = tenant.theme.tokens.colors;
+
+  return {
+    "--bg": colors.bg,
+    "--text": colors.fg,
+    "--muted": colors.muted,
+    "--accent": colors.primary,
+    "--accent-strong": colors.accent ?? colors.primary
+  } as CSSProperties;
 }
 
 export default async function Page() {
@@ -27,6 +40,8 @@ export default async function Page() {
   let tenantId = "unresolved";
   let tenantMessage =
     "This runtime shell is waiting for a valid active tenant record in the control-plane database.";
+  let tenantTagline = "";
+  let tenantStyle: CSSProperties | undefined;
 
   if (!isPlatform) {
     try {
@@ -37,6 +52,8 @@ export default async function Page() {
         tenantName = tenant.displayName;
         tenantSlug = tenant.slug;
         tenantId = tenantRequest.context.tenantId;
+        tenantTagline = tenant.about.tagline ?? "";
+        tenantStyle = buildTenantStyle(tenant);
         tenantMessage =
           "Tenant resolution is live through a request-scoped database session. Catalog, checkout, and plugin slots stay deferred until their phases.";
       }
@@ -47,14 +64,14 @@ export default async function Page() {
   }
 
   return (
-    <main className="shell">
+    <main className="shell" style={tenantStyle}>
       <section className="hero">
-        <p className="eyebrow">Phase 0 placeholder</p>
+        <p className="eyebrow">{isPlatform ? "Phase 0 placeholder" : tenantSlug}</p>
         <h1>{isPlatform ? "Shared storefront, one repo, zero fake plumbing." : tenantName}</h1>
         <p className="lede">
           {isPlatform
             ? "This app is the shared runtime shell for Yantresh Commerce. It now knows the difference between the platform host and tenant hosts before Medusa bindings and plugin slots land."
-            : tenantMessage}
+            : (tenantTagline || tenantMessage)}
         </p>
       </section>
 

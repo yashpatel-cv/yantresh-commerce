@@ -5,6 +5,7 @@
   --text: #1f1a14;
   --muted: #6e6255;
   --accent: #a66a2c;
+  --accent-strong: #c78034;
   --accent-soft: #f0dfc8;
   --shadow: 0 18px 45px rgba(31, 26, 20, 0.08);
   --radius: 24px;
@@ -22,7 +23,7 @@ body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(166, 106, 44, 0.14), transparent 32rem),
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 18%, transparent), transparent 32rem),
     linear-gradient(180deg, #f9f5ee 0%, var(--bg) 100%);
   font-family: Georgia, "Times New Roman", serif;
 }
@@ -43,6 +44,7 @@ body {
 
 .hero {
   padding: 3rem;
+  border-top: 0.45rem solid var(--accent-strong);
 }
 
 .panel {

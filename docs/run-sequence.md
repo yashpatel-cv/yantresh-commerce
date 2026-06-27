@@ -7,6 +7,7 @@ Bootstrap order for a fresh environment.
 - PostgreSQL 16 reachable at `DATABASE_URL`
 - `.env` populated from `.env.example`
 - `DEMO_STORE_ADDRESS` set (e.g. `demo-store.yantresh.com`)
+- `SECOND_DEMO_STORE_ADDRESS` set for the two-tenant proof (e.g. `corner-market.yantresh.com`)
 
 ## Steps
 
@@ -17,8 +18,9 @@ Bootstrap order for a fresh environment.
 #    migration tool (drizzle-kit) for incremental changes in P1+.
 pnpm --filter @yantresh/db schema:apply
 
-# 2. Seed the demo tenant (upsert — safe to re-run)
+# 2. Seed the demo tenants (upsert — safe to re-run)
 DEMO_STORE_ADDRESS=demo-store.yantresh.com \
+SECOND_DEMO_STORE_ADDRESS=corner-market.yantresh.com \
   pnpm --filter @yantresh/db seed:demo
 
 # 3. Start the storefront dev server
@@ -26,6 +28,11 @@ pnpm --filter @yantresh/storefront dev
 
 # 4. Verify tenant resolution (in a separate terminal)
 ./scripts/verify-tenant.sh
+
+# 5. Verify two hostnames render distinct tenant config from the same runtime
+DEMO_STORE_ADDRESS=demo-store.yantresh.com \
+SECOND_DEMO_STORE_ADDRESS=corner-market.yantresh.com \
+  ./scripts/verify-two-tenants.sh
 ```
 
 `schema:apply` reads `packages/db/sql/schema.sql` and executes it via
@@ -35,13 +42,20 @@ recreate the database to reset, or use drizzle-kit migrations for incremental
 changes.
 
 `seed:demo` uses upsert semantics — it is idempotent and safe to re-run at
-any point to refresh the demo tenant record.
+any point to refresh the demo tenant record. When `SECOND_DEMO_STORE_ADDRESS`
+is set, it also upserts an explicit second demo tenant with its own slug,
+display name, commerce refs, domain, and theme tokens.
 
 ## Verification
 
 `scripts/verify-tenant.sh` validates required env vars, then sends a request
 to the local storefront with `Host: $DEMO_STORE_ADDRESS`. A resolved tenant
 name in the response body confirms the control-plane lookup is working.
+
+`scripts/verify-two-tenants.sh` sends two requests to the same local storefront
+process with different `Host` headers. It expects each response to include its
+own tenant display name and host, and to exclude the other tenant's display
+name.
 
 ## Non-goals for P0
 

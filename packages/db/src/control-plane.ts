@@ -205,27 +205,6 @@ export async function findActiveDomainByHostname(
   }
 }
 
-export async function loadTenantConfigByHostname(
-  hostname: string,
-  sql?: SqlClient
-): Promise<TenantConfigRecord | null> {
-  const client = sql ?? createSqlClient();
-
-  try {
-    const context = await resolveActiveTenantByHostname(hostname, client);
-
-    if (!context) {
-      return null;
-    }
-
-    return queryTenantConfigByTenantId(context.tenantId, client);
-  } finally {
-    if (!sql) {
-      await client.end({ timeout: 1 });
-    }
-  }
-}
-
 export async function loadTenantConfigForRequest(
   hostname: string,
   sql?: SqlClient
