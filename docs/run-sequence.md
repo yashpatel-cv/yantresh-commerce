@@ -45,6 +45,9 @@ changes.
 any point to refresh the demo tenant record. When `SECOND_DEMO_STORE_ADDRESS`
 is set, it also upserts an explicit second demo tenant with its own slug,
 display name, commerce refs, domain, and theme tokens.
+The optional `SECOND_DEMO_TENANT_LOCALE`, `SECOND_DEMO_TENANT_CURRENCY`, and
+`SECOND_DEMO_TENANT_TIMEZONE` variables override that second tenant's regional
+defaults.
 
 ## Verification
 

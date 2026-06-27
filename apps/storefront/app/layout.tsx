@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import "./globals.css";
+import { readStorefrontRequestState } from "./storefront-request";
 
 export const metadata: Metadata = {
   title: "Yantresh Commerce Storefront",
@@ -12,9 +13,11 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const { tenantStyle } = await readStorefrontRequestState();
+
   return (
-    <html lang="en">
+    <html lang="en" style={tenantStyle}>
       <body>{children}</body>
     </html>
   );
