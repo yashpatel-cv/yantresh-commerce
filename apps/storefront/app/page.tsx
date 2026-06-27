@@ -9,7 +9,8 @@ function readEnv(name: string): string {
 }
 
 export default function Page() {
-  const storesHost = readEnv("STORES_ADDRESS");
+  const platformHost = readEnv("COMMERCE_STOREFRONT_ADDRESS");
+  const demoStoreHost = readEnv("DEMO_STORE_ADDRESS");
   const apiHost = readEnv("SHOP_API_ADDRESS");
   const adminHost = readEnv("SHOP_ADMIN_ADDRESS");
 
@@ -29,8 +30,12 @@ export default function Page() {
         <h2>Hub addresses</h2>
         <dl className="grid">
           <div>
-            <dt>Stores</dt>
-            <dd>{storesHost}</dd>
+            <dt>Platform</dt>
+            <dd>{platformHost}</dd>
+          </div>
+          <div>
+            <dt>Demo store</dt>
+            <dd>{demoStoreHost}</dd>
           </div>
           <div>
             <dt>Shop API</dt>

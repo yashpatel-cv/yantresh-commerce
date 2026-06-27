@@ -6,7 +6,7 @@
   reverse_proxy yantresh-commerce-admin:3000
 }
 
-{$STORES_ADDRESS}, *.{$DOMAIN} {
+{$COMMERCE_STOREFRONT_ADDRESS}, {$DEMO_STORE_ADDRESS} {
   reverse_proxy yantresh-commerce-storefront:3000
 }
 
