@@ -11,3 +11,7 @@ Target cost: $0/mo recurring on the existing Oracle ARM64 VPS.
 - Source of truth: [`docs/PRD.md`](./docs/PRD.md) · [`docs/schema.sql`](./docs/schema.sql) · [`docs/contracts.ts`](./docs/contracts.ts)
 - House rules: [`CLAUDE.md`](./CLAUDE.md)
 - Demo tenant bootstrap: `pnpm seed:demo`
+
+Storefront tenant requests resolve the active hostname first, then load config
+inside a request-scoped database transaction with `app.current_tenant` set for
+future RLS enforcement. Unknown hosts and invalid tenant config fail closed.

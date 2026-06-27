@@ -1,10 +1,10 @@
 import { isPlatformHostname, parseTenantConfig, resolveRequestedHostname } from "@yantresh/core";
-import { loadTenantConfigByHostname } from "@yantresh/db";
+import { loadTenantConfigForRequest } from "@yantresh/db";
 import { headers } from "next/headers";
 
 const checkpoints = [
   "Root workspace, db bootstrap, and hub fragments are in place.",
-  "Tenant host resolution now runs through the control-plane database.",
+  "Tenant host resolution now runs through a request-scoped control-plane database session.",
   "The platform host stays separate from real storefront tenants until commerce wiring lands."
 ];
 
@@ -15,7 +15,6 @@ function readEnv(name: string): string {
 export default async function Page() {
   const platformHost = readEnv("COMMERCE_STOREFRONT_ADDRESS");
   const demoStoreHost = readEnv("DEMO_STORE_ADDRESS");
-  const apiHost = readEnv("SHOP_API_ADDRESS");
   const adminHost = readEnv("SHOP_ADMIN_ADDRESS");
   const requestHeaders = await headers();
   const requestedHost = resolveRequestedHostname(
@@ -25,19 +24,21 @@ export default async function Page() {
   const isPlatform = isPlatformHostname(requestedHost, platformHost);
   let tenantName = "Not provisioned";
   let tenantSlug = "pending";
+  let tenantId = "unresolved";
   let tenantMessage =
     "This runtime shell is waiting for a valid active tenant record in the control-plane database.";
 
   if (!isPlatform) {
     try {
-      const rawConfig = await loadTenantConfigByHostname(requestedHost);
+      const tenantRequest = await loadTenantConfigForRequest(requestedHost);
 
-      if (rawConfig) {
-        const tenant = parseTenantConfig(rawConfig);
+      if (tenantRequest) {
+        const tenant = parseTenantConfig(tenantRequest.config);
         tenantName = tenant.displayName;
         tenantSlug = tenant.slug;
+        tenantId = tenantRequest.context.tenantId;
         tenantMessage =
-          "Tenant resolution is live. Catalog, checkout, and plugin slots stay deferred until their phases.";
+          "Tenant resolution is live through a request-scoped database session. Catalog, checkout, and plugin slots stay deferred until their phases.";
       }
     } catch {
       tenantMessage =
@@ -69,8 +70,8 @@ export default async function Page() {
             <dd>{isPlatform ? platformHost : tenantSlug}</dd>
           </div>
           <div>
-            <dt>{isPlatform ? "Demo store" : "Shop API"}</dt>
-            <dd>{isPlatform ? demoStoreHost : apiHost}</dd>
+            <dt>{isPlatform ? "Demo store" : "Tenant ID"}</dt>
+            <dd>{isPlatform ? demoStoreHost : tenantId}</dd>
           </div>
           <div>
             <dt>{isPlatform ? "Shop Admin" : "Admin host"}</dt>
