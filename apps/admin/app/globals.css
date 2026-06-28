@@ -120,6 +120,11 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
+h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.15rem;
+}
+
 p,
 li {
   font-size: 0.875rem;
@@ -231,4 +236,154 @@ li {
   background: rgba(30, 140, 70, 0.1);
   border-color: rgba(30, 140, 70, 0.3);
   color: #1a6030;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.data-table th {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.table-subtle {
+  margin-top: 0.2rem;
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+}
+
+.swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.swatch-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.notice {
+  margin: 1rem 0 1.25rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 0.82rem;
+}
+
+.notice-error {
+  border-color: rgba(160, 48, 31, 0.2);
+  background: rgba(160, 48, 31, 0.08);
+}
+
+.notice-success {
+  border-color: rgba(30, 140, 70, 0.2);
+  background: rgba(30, 140, 70, 0.08);
+}
+
+.stack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.9rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.field span {
+  color: var(--ink);
+}
+
+.field input,
+.field textarea,
+.field select,
+button {
+  min-height: 2.4rem;
+  border-radius: 0.55rem;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 6.5rem;
+}
+
+.field input[readonly] {
+  color: var(--ink-muted);
+  background: rgba(83, 58, 35, 0.04);
+}
+
+.field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+}
+
+.field-checkbox input {
+  width: 1rem;
+  height: 1rem;
+}
+
+button {
+  width: fit-content;
+  background: #2f5a50;
+  border-color: rgba(47, 90, 80, 0.45);
+  color: #f5f0e7;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #264940;
+}
+
+.edit-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.inset-card {
+  margin-bottom: 0;
+  background: rgba(255, 253, 248, 0.92);
 }

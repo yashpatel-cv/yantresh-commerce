@@ -23,6 +23,9 @@ importers:
       '@yantresh/config-schema':
         specifier: workspace:*
         version: link:../../packages/config-schema
+      '@yantresh/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       next:
         specifier: ^16.2.9
         version: 16.2.9(react-dom@19.2.7(react@19.2.7))(react@19.2.7)

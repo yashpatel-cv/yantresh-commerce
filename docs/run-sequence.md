@@ -66,3 +66,43 @@ name.
 - Medusa DB bootstrap (handled by `medusa migrations run`)
 - RLS enforcement tests (P6)
 - Hub / Caddy wiring (separate `infra/` step)
+
+---
+
+## P1 — Control-plane write-path verification
+
+After the schema is applied and the admin dev server is running (`pnpm --filter admin dev`), verify the tenant and domain write paths manually:
+
+```sh
+# Start the admin dev server
+DATABASE_URL=postgres://... \
+DOMAIN=yantresh.com \
+SHOP_ADMIN_ADDRESS=shop-admin.yantresh.com \
+COMMERCE_STOREFRONT_ADDRESS=stores.yantresh.com \
+SHOP_API_ADDRESS=shop-api.yantresh.com \
+  pnpm --filter admin dev
+```
+
+**Tenant write path:**
+1. Open `http://localhost:3001/tenants`.
+2. Fill the Create form with slug `test-co`, display name, locale `en`, currency `CAD`, timezone `America/Toronto`, status `draft`.
+3. Submit → expect a "Saved." notice and a new row in the list.
+4. Edit the row: change status to `active` without filling commerce binding → expect a rejected-write error ("Active tenants require a complete commerce binding.").
+5. Fill in commerce binding (any non-empty values) + ensure a primary active domain and active theme exist, then re-submit as `active` → expect success.
+
+**Domain write path:**
+1. Open `http://localhost:3001/domains`.
+2. Add a domain for the test tenant with hostname `test-co.yantresh.com`, `isPrimary` checked, status `active`.
+3. Submit → expect success and new row.
+4. Attempt to add `shop-admin.yantresh.com` → expect a rejected-write error ("Hostname is reserved for a platform service.").
+5. Attempt to set status `active` on a domain owned by a `suspended` tenant → expect rejection ("Only active tenants can receive an active domain.").
+
+**Fail-closed read path:**
+With `DATABASE_URL` pointing to an unreachable host, load `/tenants` or `/domains`.
+The page must render with an error banner and an empty table — never a crash or a 500.
+
+### Non-goals for P1
+
+- Drizzle-kit migrations (still schema:apply for now)
+- Payload CMS integration (deferred until Medusa is wired in P3)
+- Theme and feature-flag write paths (read-only in admin for now; write via seed or psql)

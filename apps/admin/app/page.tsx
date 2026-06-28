@@ -6,8 +6,8 @@ export default function Dashboard() {
   const env = platformEnv();
 
   const sections = [
-    { href: "/tenants", label: "Tenants", desc: "Tenant config records — CRUD deferred to Payload" },
-    { href: "/domains", label: "Domains", desc: "Hostname → tenant routing — TLS managed in hub/Caddy" },
+    { href: "/tenants", label: "Tenants", desc: "Tenant metadata + activation-safe writes are now live" },
+    { href: "/domains", label: "Domains", desc: "Hostname → tenant routing — manual write path is now live" },
     { href: "/theme", label: "Theme / Config", desc: "ThemeTokens + feature flags — visual editor deferred" },
     { href: "/status", label: "Status", desc: "Service addresses + health — health probes deferred" },
   ];
@@ -18,7 +18,8 @@ export default function Dashboard() {
       <h1>Yantresh Commerce Admin</h1>
       <p>
         This is the Phase 1 admin shell. It exposes the config-plane surface for the platform.
-        All write operations are deferred to Phase 2 (Payload CMS integration).
+        Operators can now manage tenant metadata and domain routing rows directly from the admin
+        shell while richer config editing stays deferred.
       </p>
 
       <div className="card" style={{ marginTop: "1.25rem" }}>
@@ -46,8 +47,8 @@ export default function Dashboard() {
         <h2>What is deferred</h2>
         <ul>
           <li>Auth / session — Phase 2 (Payload built-in auth or NextAuth)</li>
-          <li>Tenant CRUD — Phase 2 (Payload collections over <code>schema.sql</code>)</li>
-          <li>Domain provisioning — hub Caddy on-demand TLS (already wired)</li>
+          <li>Full config CMS — Phase 2 (Payload collections over <code>schema.sql</code>)</li>
+          <li>Domain provisioning automation — hub Caddy on-demand TLS (already wired)</li>
           <li>Catalog management — plugin-level concern, not control plane</li>
           <li>Payload CMS install — adds ~40 MB; deferred until config UI is needed</li>
         </ul>

@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "controller": "commerce-supervisor",
+  "defaultWorkerModel": {
+    "canonical": "openai/gpt-5.4",
+    "sessionSpawnAlias": "gpt-5.4"
+  },
+  "canonicalFiles": [
+    "CLAUDE.md",
+    "PROJECT_BRIEF.md",
+    "docs/PRD.md",
+    "docs/ROUTER_REQUIREMENTS.md",
+    "docs/schema.sql",
+    "docs/contracts.ts"
+  ],
+  "policy": {
+    "maxAttemptsPerMilestone": 3,
+    "oneWorkerAtATime": true,
+    "skipBlockedMilestones": true,
+    "respectDirtyWorktree": true
+  },
+  "milestones": [
+    {
+      "id": "p1_control_plane_acceptance",
+      "phase": "P1",
+      "title": "Control-plane admin acceptance",
+      "goal": "Finish and verify the control-plane admin write path without regressing the current uncommitted admin/control-plane work.",
+      "acceptance": [
+        "Tenant and domain write paths are coherent with the canonical schema.",
+        "The admin slice stays fail-closed when the control-plane DB is unavailable or incomplete.",
+        "Verification notes or commands for the slice are captured in repo docs if behavior changed."
+      ],
+      "sources": [
+        "apps/admin",
+        "packages/db",
+        "docs/PRD.md",
+        "docs/schema.sql",
+        "docs/contracts.ts"
+      ],
+      "writePaths": [
+        "apps/admin/**",
+        "packages/db/**",
+        "docs/**"
+      ],
+      "nonGoals": [
+        "Full Payload replacement",
+        "Medusa checkout wiring",
+        "Plugin implementations"
+      ]
+    },
+    {
+      "id": "p2_shared_storefront_acceptance",
+      "phase": "P2",
+      "title": "Shared storefront two-tenant acceptance",
+      "goal": "Push the shared storefront from host-resolution scaffolding to the P2 acceptance gate for two distinct tenants.",
+      "acceptance": [
+        "Two tenant hosts render distinctly from the same runtime.",
+        "Tenant resolution stays fail-closed on unknown or invalid hosts.",
+        "The repo includes a reliable verification path for the shared runtime proof."
+      ],
+      "sources": [
+        "apps/storefront",
+        "packages/core",
+        "packages/db",
+        "scripts",
+        "docs/run-sequence.md"
+      ],
+      "writePaths": [
+        "apps/storefront/**",
+        "packages/core/**",
+        "packages/db/**",
+        "scripts/**",
+        "docs/**"
+      ],
+      "nonGoals": [
+        "Real checkout",
+        "Generated per-client apps",
+        "Broad design polish"
+      ]
+    },
+    {
+      "id": "p3_medusa_bootstrap",
+      "phase": "P3",
+      "title": "Medusa bootstrap and tenant binding",
+      "goal": "Establish the smallest viable Medusa wiring for tenant sales-channel and publishable-key binding.",
+      "acceptance": [
+        "Repo contains a bootstrapped Medusa service path aligned with hub deployment.",
+        "Tenant config has a concrete path to Medusa sales-channel and publishable-key usage.",
+        "Docs state what remains stubbed before real checkout."
+      ],
+      "sources": [
+        "apps",
+        "packages",
+        "infra/hub",
+        "docs/PRD.md"
+      ],
+      "writePaths": [
+        "apps/**",
+        "packages/**",
+        "infra/hub/**",
+        "docs/**"
+      ],
+      "nonGoals": [
+        "Full production checkout",
+        "Breadth plugins",
+        "Generator work"
+      ]
+    },
+    {
+      "id": "p4_plugin_registry_minimum",
+      "phase": "P4",
+      "title": "Plugin registry minimum path",
+      "goal": "Land the minimum typed registry and toggle path required by the PRD without overbuilding plugin breadth.",
+      "acceptance": [
+        "Core registry and tenant enablement path exist.",
+        "At least one minimal toggle path is demonstrable without redeploy assumptions.",
+        "Implementation remains typed and config-driven."
+      ],
+      "sources": [
+        "packages/plugin-sdk",
+        "packages/core",
+        "packages/config-schema",
+        "packages/db",
+        "docs/contracts.ts"
+      ],
+      "writePaths": [
+        "packages/plugin-sdk/**",
+        "packages/core/**",
+        "packages/config-schema/**",
+        "packages/db/**",
+        "docs/**"
+      ],
+      "nonGoals": [
+        "Marketplace UX",
+        "Full plugin catalog",
+        "Generated apps"
+      ]
+    }
+  ]
+}

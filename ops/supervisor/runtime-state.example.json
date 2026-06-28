@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "controller": "commerce-supervisor",
+  "status": "running",
+  "currentStep": "bootstrap",
+  "currentMilestoneId": "p1_control_plane_acceptance",
+  "nextAction": "Audit the current dirty admin/control-plane slice, then decide whether to continue it directly or defer to the next non-overlapping milestone.",
+  "activeWorker": null,
+  "attempts": {
+    "p1_control_plane_acceptance": 0,
+    "p2_shared_storefront_acceptance": 0,
+    "p3_medusa_bootstrap": 0,
+    "p4_plugin_registry_minimum": 0
+  },
+  "milestones": {
+    "p1_control_plane_acceptance": {
+      "status": "queued",
+      "lastFailure": null
+    },
+    "p2_shared_storefront_acceptance": {
+      "status": "queued",
+      "lastFailure": null
+    },
+    "p3_medusa_bootstrap": {
+      "status": "queued",
+      "lastFailure": null
+    },
+    "p4_plugin_registry_minimum": {
+      "status": "queued",
+      "lastFailure": null
+    }
+  },
+  "history": [
+    {
+      "at": "2026-06-28T00:00:00Z",
+      "event": "initialized",
+      "detail": "Supervisor queue seeded from PRD roadmap and current repo state."
+    }
+  ]
+}
