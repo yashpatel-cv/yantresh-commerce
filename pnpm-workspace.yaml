@@ -2,7 +2,9 @@ packages:
   - "apps/*"
   - "packages/*"
 
-onlyBuiltDependencies:
-  - sharp
 allowBuilds:
+  '@medusajs/telemetry': true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true
   sharp: true

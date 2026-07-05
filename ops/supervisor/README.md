@@ -19,8 +19,8 @@ This loop is intentionally small:
    - `ops/supervisor/runtime-state.json`
 2. Treat `runtime-state.json` as the TaskFlow-style persisted state bag.
 3. Keep exactly one active milestone attempt at a time.
-4. Spawn milestone workers with the default worker model pinned to `openai/gpt-5.4`.
-   - OpenClaw `sessions_spawn` uses the tool-side alias `gpt-5.4`.
+4. Spawn milestone workers with the default worker model pinned to `openai/gpt-5.5`.
+   - OpenClaw `sessions_spawn` uses the tool-side alias `gpt-5.5`.
 5. Persist state after every material event:
    - queue selection
    - worker spawn

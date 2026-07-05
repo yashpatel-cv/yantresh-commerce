@@ -106,3 +106,60 @@ The page must render with an error banner and an empty table — never a crash o
 - Drizzle-kit migrations (still schema:apply for now)
 - Payload CMS integration (deferred until Medusa is wired in P3)
 - Theme and feature-flag write paths (read-only in admin for now; write via seed or psql)
+
+---
+
+## P3 — Medusa bootstrap and commerce-client path
+
+`apps/commerce` is a Medusa v2 service. `packages/commerce-client` is the thin Store API wrapper the storefront will use.
+
+### Bootstrapping the Medusa service
+
+```sh
+# 1. Bootstrap: run once on a fresh Medusa database
+#    Medusa creates its own schema via its own migration system.
+DATABASE_URL=$MEDUSA_DATABASE_URL \
+REDIS_URL=$REDIS_URL \
+  pnpm --filter @yantresh/commerce migrations
+
+# 2. Start Medusa in dev mode
+DATABASE_URL=$MEDUSA_DATABASE_URL \
+REDIS_URL=$REDIS_URL \
+  pnpm --filter @yantresh/commerce dev
+# Medusa admin: http://localhost:9000/app
+# Store API:    http://localhost:9000/store
+
+# 3. Provision a sales channel, region, and publishable key via Medusa admin
+#    (http://localhost:9000/app → Settings → Sales Channels → Create)
+#    Then update the tenant row via the admin shell:
+DATABASE_URL=$DATABASE_URL \
+  psql -c "UPDATE tenant SET
+    commerce_sales_channel_id = '<channel-id>',
+    commerce_region_id        = '<region-id>',
+    commerce_pub_key_ref      = '<publishable-key>'
+  WHERE slug = 'demo-store';"
+```
+
+### Using the commerce-client
+
+The storefront resolves each tenant's `TenantConfig.commerce.publishableKeyRef` at request time. That ref is resolved to the actual key (via the `secret` table) and passed to `createCommerceClient`:
+
+```ts
+import { createCommerceClient } from "@yantresh/commerce-client";
+
+const client = createCommerceClient({
+  baseUrl: process.env.MEDUSA_BACKEND_URL!,
+  publishableKey: resolvedPublishableKey
+});
+
+// All Store API calls are automatically scoped to the tenant's sales channel:
+const { products } = await client.request<{ products: unknown[] }>("/products");
+```
+
+### What is stubbed — not yet real checkout
+
+- **Secret resolution** — `commerce_pub_key_ref` is stored as a plain ref; the AES-256-GCM `secret` table resolution is a P6 hardening item. For now, store the publishable key directly (it is not a secret in Medusa's model).
+- **Product display** — the storefront renders tenant info but does not yet call Medusa for catalog; wired in P3 full implementation.
+- **Cart + checkout** — deferred until P3 full (Medusa cart + one payment provider in test mode).
+- **Fulfillment** — deferred to P5.
+- **Worker** — `apps/worker` (BullMQ) is scaffolded but not yet wired to Medusa events.
