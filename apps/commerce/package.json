@@ -9,8 +9,12 @@
     "seed": "medusa exec ./src/scripts/seed.ts"
   },
   "dependencies": {
-    "@medusajs/framework": "^2.8.0",
-    "@medusajs/medusa": "^2.8.0"
+    "@medusajs/admin-sdk": "2.17.1",
+    "@medusajs/cli": "2.17.1",
+    "@medusajs/framework": "2.17.1",
+    "@medusajs/medusa": "2.17.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

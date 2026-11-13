@@ -1,4 +1,4 @@
-import { defineConfig } from "@medusajs/framework/config";
+import { defineConfig } from "@medusajs/framework/utils";
 
 export default defineConfig({
   projectConfig: {
@@ -8,7 +8,14 @@ export default defineConfig({
       | "shared"
       | "server"
       | "worker"
-      | undefined
+      | undefined,
+    http: {
+      storeCors: process.env.STORE_CORS!,
+      adminCors: process.env.ADMIN_CORS!,
+      authCors: process.env.AUTH_CORS!,
+      jwtSecret: process.env.JWT_SECRET!,
+      cookieSecret: process.env.COOKIE_SECRET!
+    }
   },
   admin: {
     disable: Boolean(process.env.MEDUSA_DISABLE_ADMIN)

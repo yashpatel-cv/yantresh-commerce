@@ -8,3 +8,7 @@ allowBuilds:
   msgpackr-extract: true
   protobufjs: true
   sharp: true
+
+# Medusa's generated admin entry imports transitive @medusajs/* modules.
+publicHoistPattern:
+  - "@medusajs/*"
