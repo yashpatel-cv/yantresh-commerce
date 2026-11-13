@@ -18,6 +18,6 @@ export default defineConfig({
     }
   },
   admin: {
-    disable: Boolean(process.env.MEDUSA_DISABLE_ADMIN)
+    disable: process.env.MEDUSA_DISABLE_ADMIN === "true"
   }
 });
