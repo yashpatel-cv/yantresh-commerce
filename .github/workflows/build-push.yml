@@ -15,8 +15,8 @@ concurrency:
 
 jobs:
   build:
-    # Native arm64 runner (the VPS's arch); amd64 is emulated for x86 hosts.
-    runs-on: ubuntu-24.04-arm
+    # x86 runner, arm64 emulated: amd64 emulated on an arm runner OOMs the Next.js builds.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
